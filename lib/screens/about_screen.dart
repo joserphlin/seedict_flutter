@@ -23,27 +23,39 @@ class AboutScreen extends StatelessWidget {
             Center(
               child: Column(
                 children: [
+                  Image.asset(
+                    'assets/logo-see.png',
+                    height: 100,
+                    errorBuilder: (context, error, stackTrace) {
+                      return const Icon(
+                        Icons.book,
+                        size: 80,
+                        color: AppTheme.rosyBrown800,
+                      );
+                    },
+                  ),
+                  const SizedBox(height: 16),
                   const Text(
                     '米时典',
                     style: TextStyle(
-                      fontSize: 48,
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
                       color: AppTheme.rosyBrown800,
                     ),
                   ),
-                  const SizedBox(height: 8),
                   const Text(
                     'SeeDict',
                     style: TextStyle(
-                      fontSize: 24,
+                      fontSize: 20,
                       color: AppTheme.rosyBrown600,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   const Text(
                     '福州话词典',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 16,
                       color: AppTheme.rosyBrown600,
                     ),
                   ),

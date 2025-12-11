@@ -5,7 +5,15 @@ import 'providers/search_provider.dart';
 import 'router/app_router.dart';
 import 'utils/theme.dart';
 
+import 'package:flutter/services.dart';
+
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    systemNavigationBarColor: AppTheme.wheat50,
+    systemNavigationBarIconBrightness: Brightness.dark,
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.dark,
+  ));
   runApp(const MyApp());
 }
 

@@ -40,102 +40,71 @@ class _HomeScreenState extends State<HomeScreen> {
     final logoTranslateY = (_scrollY * 1).clamp(0.0, 200.0);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          children: [
-            // Header section with nav and logo
-            Container(
-              color: AppTheme.wheat50,
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-              child: Column(
-                children: [
-                  // Navigation panel
-                  Align(
-                    alignment: Alignment.centerRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(right: 16),
-                      child: const NavPanel(),
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-
-                  // Logo with scroll animation
-                  Opacity(
-                    opacity: 1 - logoOpacity,
-                    child: Transform.translate(
-                      offset: Offset(0, -logoTranslateY),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          controller: _scrollController,
+          child: Column(
+            children: [
+              // Header section with nav and logo
+              Container(
+                color: AppTheme.wheat50,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                child: Column(
+                  children: [
+                    // Navigation panel
+                    Align(
+                      alignment: Alignment.centerRight,
                       child: Padding(
-                        padding: const EdgeInsets.only(left: 40),
-                        child: Image.asset(
-                          'assets/logo-see.png',
-                          height: 120,
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Text(
-                              '米时典',
-                              style: TextStyle(
-                                fontSize: 48,
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.rosyBrown800,
-                              ),
-                            );
-                          },
+                        padding: const EdgeInsets.only(right: 16),
+                        child: const NavPanel(),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
+
+                    // Logo with scroll animation
+                    Opacity(
+                      opacity: 1 - logoOpacity,
+                      child: Transform.translate(
+                        offset: Offset(0, -logoTranslateY),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 40),
+                          child: Image.asset(
+                            'assets/logo-see.png',
+                            height: 120,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Text(
+                                '米时典',
+                                style: TextStyle(
+                                  fontSize: 48,
+                                  fontWeight: FontWeight.bold,
+                                  color: AppTheme.rosyBrown800,
+                                ),
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 32),
+                    const SizedBox(height: 32),
 
-                  // Search bar
-                  ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 600),
-                    child: const custom.SearchBar(),
-                  ),
-                ],
+                    // Search bar
+                    ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 600),
+                      child: const custom.SearchBar(),
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            // Words deck section
-            Container(
-              color: AppTheme.wheat50,
-              padding: const EdgeInsets.symmetric(vertical: 40),
-              child: const WordsDeck(),
-            ),
-
-            // Footer
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(40),
-              child: Column(
-                children: [
-                  const Text(
-                    '米时典 SeeDict',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: AppTheme.rosyBrown800,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    '福州话词典',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppTheme.rosyBrown600,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    '© 2024 SeeDict. All rights reserved.',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: AppTheme.rosyBrown400,
-                    ),
-                  ),
-                ],
+              // Words deck section
+              Container(
+                color: AppTheme.wheat50,
+                padding: const EdgeInsets.symmetric(vertical: 40),
+                child: const WordsDeck(),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
