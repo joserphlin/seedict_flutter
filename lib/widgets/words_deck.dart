@@ -114,6 +114,9 @@ class _WordCardState extends State<_WordCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () {
+        context.push('/word?w=${widget.word.w}');
+      },
       onPanStart: (details) {
         setState(() {
           _isDragging = true;
@@ -185,33 +188,28 @@ class _WordCardState extends State<_WordCard> {
                 ),
                 const SizedBox(height: 20),
                 Center(
-                  child: GestureDetector(
-                    onTap: () {
-                      context.push('/word?w=${widget.word.w}');
-                    },
-                    child: Column(
-                      children: [
-                        Text(
-                          widget.word.text,
-                          style: const TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
-                            color: AppTheme.rosyBrown800,
-                          ),
-                          textAlign: TextAlign.center,
+                  child: Column(
+                    children: [
+                      Text(
+                        widget.word.text,
+                        style: const TextStyle(
+                          fontSize: 36,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.rosyBrown800,
                         ),
-                        if (widget.word.pron.isNotEmpty) ...[
-                          const SizedBox(height: 8),
-                          Text(
-                            widget.word.pron,
-                            style: const TextStyle(
-                              fontSize: 14,
-                              color: AppTheme.rosyBrown600,
-                            ),
+                        textAlign: TextAlign.center,
+                      ),
+                      if (widget.word.pron.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          widget.word.pron,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: AppTheme.rosyBrown600,
                           ),
-                        ],
+                        ),
                       ],
-                    ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),

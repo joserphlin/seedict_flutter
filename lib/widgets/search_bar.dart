@@ -86,158 +86,165 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(
-                _showHistory && _filteredHistory.isNotEmpty ? 24 : 48),
-            border: Border.all(
-              color: AppTheme.rosyBrown300,
-              width: 2,
-            ),
-            boxShadow: _showHistory && _filteredHistory.isNotEmpty
-                ? [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 8,
-                      offset: const Offset(0, 2),
-                    ),
-                  ]
-                : [],
-          ),
-          child: Column(
-            children: [
-              // 搜索输入框
-              Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.search, size: 28),
-                      color: AppTheme.rosyBrown400,
-                      onPressed: _handleSubmit,
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: _controller,
-                        focusNode: _focusNode,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          hintText: '搜索福州话词汇...',
-                          contentPadding: EdgeInsets.symmetric(horizontal: 8),
-                        ),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: AppTheme.rosyBrown800,
-                        ),
-                        onChanged: (value) => _filterHistory(),
-                        onSubmitted: (value) => _handleSubmit(),
-                      ),
-                    ),
-                  ],
-                ),
+    return TapRegion(
+      onTapOutside: (event) {
+        if (_showHistory) {
+          setState(() {
+            _showHistory = false;
+            _selectedIndex = -1;
+          });
+          _focusNode.unfocus();
+        }
+      },
+      child: Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(
+                  _showHistory && _filteredHistory.isNotEmpty ? 24 : 48),
+              border: Border.all(
+                color: AppTheme.rosyBrown300,
+                width: 2,
               ),
+              boxShadow: _showHistory && _filteredHistory.isNotEmpty
+                  ? [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
+                      ),
+                    ]
+                  : [],
+            ),
+            child: Column(
+              children: [
+                // 搜索输入框
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          focusNode: _focusNode,
+                          textInputAction: TextInputAction.search,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '搜索福州话词汇...',
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 8),
+                            suffixIcon: _controller.text.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.close, size: 20),
+                                    color: AppTheme.rosyBrown300,
+                                    onPressed: () {
+                                      _controller.clear();
+                                      _filterHistory();
+                                    },
+                                  )
+                                : null,
+                          ),
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: AppTheme.rosyBrown800,
+                          ),
+                          onChanged: (value) => _filterHistory(),
+                          onSubmitted: (value) => _handleSubmit(),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.search, size: 28),
+                        color: AppTheme.rosyBrown400,
+                        onPressed: _handleSubmit,
+                      ),
+                    ],
+                  ),
+                ),
 
-              // 历史记录列表
-              if (_showHistory && _filteredHistory.isNotEmpty) ...[
-                const Divider(height: 1),
-                Container(
-                  constraints: const BoxConstraints(maxHeight: 300),
-                  child: ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: _filteredHistory.length + 1,
-                    itemBuilder: (context, index) {
-                      if (index == _filteredHistory.length) {
-                        // 清空历史按钮
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: TextButton(
-                              onPressed: _clearHistory,
-                              child: const Text(
-                                '清空历史',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: AppTheme.rosyBrown300,
+                // 历史记录列表
+                if (_showHistory && _filteredHistory.isNotEmpty) ...[
+                  const Divider(height: 1),
+                  Container(
+                    constraints: const BoxConstraints(maxHeight: 300),
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: _filteredHistory.length + 1,
+                      itemBuilder: (context, index) {
+                        if (index == _filteredHistory.length) {
+                          // 清空历史按钮
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                onPressed: _clearHistory,
+                                child: const Text(
+                                  '清空历史',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: AppTheme.rosyBrown300,
+                                  ),
                                 ),
                               ),
                             ),
+                          );
+                        }
+
+                        final item = _filteredHistory[index];
+                        final isSelected = index == _selectedIndex;
+
+                        return MouseRegion(
+                          onEnter: (_) =>
+                              setState(() => _selectedIndex = index),
+                          onExit: (_) => setState(() => _selectedIndex = -1),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: isSelected ? AppTheme.rosyBrown50 : null,
+                              border: Border(
+                                left: BorderSide(
+                                  color: isSelected
+                                      ? AppTheme.rosyBrown700
+                                      : Colors.transparent,
+                                  width: 4,
+                                ),
+                              ),
+                            ),
+                            child: ListTile(
+                              dense: true,
+                              leading: const Icon(
+                                Icons.history,
+                                color: AppTheme.rosyBrown400,
+                                size: 20,
+                              ),
+                              title: Text(
+                                item,
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? AppTheme.rosyBrown700
+                                      : AppTheme.rosyBrown600,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              trailing: IconButton(
+                                icon: const Icon(Icons.close, size: 18),
+                                color: AppTheme.rosyBrown300,
+                                onPressed: () => _deleteHistory(item),
+                              ),
+                              onTap: () => _selectHistory(item),
+                            ),
                           ),
                         );
-                      }
-
-                      final item = _filteredHistory[index];
-                      final isSelected = index == _selectedIndex;
-
-                      return MouseRegion(
-                        onEnter: (_) => setState(() => _selectedIndex = index),
-                        onExit: (_) => setState(() => _selectedIndex = -1),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: isSelected ? AppTheme.rosyBrown50 : null,
-                            border: Border(
-                              left: BorderSide(
-                                color: isSelected
-                                    ? AppTheme.rosyBrown700
-                                    : Colors.transparent,
-                                width: 4,
-                              ),
-                            ),
-                          ),
-                          child: ListTile(
-                            dense: true,
-                            leading: const Icon(
-                              Icons.history,
-                              color: AppTheme.rosyBrown400,
-                              size: 20,
-                            ),
-                            title: Text(
-                              item,
-                              style: TextStyle(
-                                color: isSelected
-                                    ? AppTheme.rosyBrown700
-                                    : AppTheme.rosyBrown600,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.close, size: 18),
-                              color: AppTheme.rosyBrown300,
-                              onPressed: () => _deleteHistory(item),
-                            ),
-                            onTap: () => _selectHistory(item),
-                          ),
-                        ),
-                      );
-                    },
+                      },
+                    ),
                   ),
-                ),
+                ],
               ],
-            ],
-          ),
-        ),
-
-        // 背景遮罩
-        if (_showHistory && _filteredHistory.isNotEmpty)
-          Positioned.fill(
-            child: GestureDetector(
-              onTap: () {
-                setState(() {
-                  _showHistory = false;
-                  _selectedIndex = -1;
-                });
-                _focusNode.unfocus();
-              },
-              child: Container(
-                color: Colors.black.withOpacity(0.1),
-              ),
             ),
           ),
-      ],
+        ],
+      ),
     );
   }
 }
