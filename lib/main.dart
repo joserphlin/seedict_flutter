@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/deck_provider.dart';
 import 'providers/search_provider.dart';
+import 'providers/favorite_provider.dart';
 import 'router/app_router.dart';
 import 'utils/theme.dart';
 
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => DeckProvider()),
         ChangeNotifierProvider(create: (_) => SearchProvider()),
+        ChangeNotifierProvider(create: (_) => FavoriteProvider()),
       ],
       child: MaterialApp.router(
         title: '米时典',

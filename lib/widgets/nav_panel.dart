@@ -33,6 +33,10 @@ class NavPanel extends StatelessWidget {
             onTap: () => context.push('/tutorial'),
           ),
           _NavButton(
+            label: '收藏夹',
+            onTap: () => context.push('/favorites'),
+          ),
+          _NavButton(
             label: '帮助',
             onTap: () => _launchUrl(
                 'https://jcnf40n3hvft.feishu.cn/docx/FSqidtsgjo25x0x6R1KcChopnTc'),

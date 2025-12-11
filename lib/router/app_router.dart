@@ -5,6 +5,7 @@ import '../screens/search_screen.dart';
 import '../screens/word_screen.dart';
 import '../screens/about_screen.dart';
 import '../screens/tutorial_screen.dart';
+import '../screens/favorites_screen.dart';
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -40,6 +41,11 @@ class AppRouter {
         path: '/tutorial',
         name: 'tutorial',
         builder: (context, state) => const TutorialScreen(),
+      ),
+      GoRoute(
+        path: '/favorites',
+        name: 'favorites',
+        builder: (context, state) => const FavoritesScreen(),
       ),
     ],
     errorBuilder: (context, state) => Scaffold(

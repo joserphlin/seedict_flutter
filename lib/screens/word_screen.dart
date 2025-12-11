@@ -5,6 +5,9 @@ import '../models/audio_info.dart';
 import '../services/api_service.dart';
 import '../utils/theme.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:provider/provider.dart';
+import '../providers/favorite_provider.dart';
+import '../models/word.dart';
 
 class WordScreen extends StatefulWidget {
   final String w;
@@ -136,6 +139,41 @@ class _WordScreenState extends State<WordScreen> {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => context.pop(),
         ),
+        actions: [
+          if (_wordDetail != null)
+            Consumer<FavoriteProvider>(
+              builder: (context, favoriteProvider, child) {
+                final isFavorite = favoriteProvider.isFavorite(widget.w);
+                return IconButton(
+                  icon: Icon(
+                    isFavorite ? Icons.star : Icons.star_border,
+                    color: isFavorite ? Colors.amber : AppTheme.rosyBrown400,
+                  ),
+                  onPressed: () {
+                    final detail = _wordDetail!.seedict;
+                    final word = Word(
+                      w: widget.w,
+                      text: detail.text,
+                      pron: detail.pronPrimary,
+                      expl: detail.expls
+                          .map((e) => e.expl ?? '')
+                          .where((e) => e.isNotEmpty)
+                          .join('；'),
+                    );
+                    favoriteProvider.toggleFavorite(word);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          isFavorite ? '已取消收藏' : '已加入收藏',
+                        ),
+                        duration: const Duration(seconds: 1),
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+        ],
       ),
       body: _buildBody(),
     );
