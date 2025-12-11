@@ -1,0 +1,53 @@
+{
+  "app": {
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "/Users/chenxian/.ohos/config/default_ohos_3Vj9_sAdYWLdc-GAX_7Q7LvNEL2RL08Gj0ZlnMC0d6w=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001B41A56794779A8AE10BBED96F7F2204F26D9AE9DAD153ABE5CEF562D861A6494A4FD68F907A441D",
+          "profile": "/Users/chenxian/.ohos/config/default_ohos_3Vj9_sAdYWLdc-GAX_7Q7LvNEL2RL08Gj0ZlnMC0d6w=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "/Users/chenxian/.ohos/config/default_ohos_3Vj9_sAdYWLdc-GAX_7Q7LvNEL2RL08Gj0ZlnMC0d6w=.p12",
+          "storePassword": "0000001B4BE6AA2BE0C10BFD525AB0BD1BCC899091D53359B5D43B7E96693CBD1019B67657D4F85D5E433E"
+        }
+      }
+    ],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "compatibleSdkVersion": "5.1.0(18)",
+        "runtimeOS": "HarmonyOS",
+        "targetSdkVersion": "6.0.1(21)"
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "profile"
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
