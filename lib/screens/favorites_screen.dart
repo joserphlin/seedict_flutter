@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/favorite_provider.dart';
-import '../utils/theme.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
@@ -20,9 +19,9 @@ class FavoritesScreen extends StatelessWidget {
       body: Consumer<FavoriteProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(
-                color: AppTheme.rosyBrown600,
+                color: Theme.of(context).colorScheme.primary,
               ),
             );
           }
@@ -32,17 +31,17 @@ class FavoritesScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.star_border,
                     size: 64,
-                    color: AppTheme.rosyBrown200,
+                    color: Theme.of(context).colorScheme.outlineVariant,
                   ),
                   const SizedBox(height: 16),
-                  const Text(
+                  Text(
                     '暂无收藏',
                     style: TextStyle(
                       fontSize: 16,
-                      color: AppTheme.rosyBrown400,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
@@ -60,10 +59,10 @@ class FavoritesScreen extends StatelessWidget {
                 child: ListTile(
                   title: Text(
                     word.text,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.rosyBrown800,
+                      color: Theme.of(context).textTheme.titleLarge?.color,
                     ),
                   ),
                   subtitle: Column(
@@ -72,17 +71,18 @@ class FavoritesScreen extends StatelessWidget {
                       if (word.pron.isNotEmpty)
                         Text(
                           word.pron,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
-                            color: AppTheme.rosyBrown600,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                         ),
                       if (word.expl.isNotEmpty)
                         Text(
                           word.expl,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
-                            color: AppTheme.rosyBrown800,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -91,7 +91,7 @@ class FavoritesScreen extends StatelessWidget {
                   ),
                   trailing: IconButton(
                     icon: const Icon(Icons.delete_outline),
-                    color: AppTheme.rosyBrown300,
+                    color: Theme.of(context).colorScheme.error,
                     onPressed: () {
                       provider.toggleFavorite(word);
                     },

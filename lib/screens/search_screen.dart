@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../providers/search_provider.dart';
-import '../utils/theme.dart';
 
 class SearchScreen extends StatefulWidget {
   final String query;
@@ -43,9 +42,9 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Consumer<SearchProvider>(
         builder: (context, provider, child) {
           if (provider.isLoading) {
-            return const Center(
+            return Center(
               child: CircularProgressIndicator(
-                color: AppTheme.rosyBrown600,
+                color: Theme.of(context).colorScheme.primary,
               ),
             );
           }
@@ -55,10 +54,10 @@ class _SearchScreenState extends State<SearchScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
+                  Icon(
                     Icons.error_outline,
                     size: 64,
-                    color: AppTheme.rosyBrown400,
+                    color: Theme.of(context).colorScheme.error,
                   ),
                   const SizedBox(height: 16),
                   Text(
@@ -68,7 +67,8 @@ class _SearchScreenState extends State<SearchScreen> {
                   const SizedBox(height: 8),
                   Text(
                     provider.error!,
-                    style: const TextStyle(color: AppTheme.rosyBrown400),
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                 ],
               ),
@@ -86,14 +86,14 @@ class _SearchScreenState extends State<SearchScreen> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: AppTheme.wheat300,
+                      color: Theme.of(context).colorScheme.secondary,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
                       '查询：${provider.queries.join('、')}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 18,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onSecondary,
                       ),
                     ),
                   ),
@@ -101,14 +101,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
                 // Results
                 if (provider.results.isEmpty)
-                  const Center(
+                  Center(
                     child: Padding(
-                      padding: EdgeInsets.all(40),
+                      padding: const EdgeInsets.all(40),
                       child: Text(
                         '未找到相关结果',
                         style: TextStyle(
                           fontSize: 16,
-                          color: AppTheme.rosyBrown400,
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ),
@@ -122,9 +122,21 @@ class _SearchScreenState extends State<SearchScreen> {
                         margin: const EdgeInsets.only(bottom: 16),
                         padding: const EdgeInsets.all(16),
                         decoration: BoxDecoration(
-                          color: AppTheme
-                              .wheat200, // 加深背景颜色（从 wheat100 改为 wheat200）
-                          borderRadius: BorderRadius.circular(8),
+                          color: Theme.of(context).cardColor,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.outlineVariant,
+                            width: 1,
+                          ),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Theme.of(context)
+                                  .shadowColor
+                                  .withOpacity(0.05),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -141,23 +153,29 @@ class _SearchScreenState extends State<SearchScreen> {
                                       vertical: 4,
                                     ),
                                     decoration: BoxDecoration(
-                                      color: AppTheme.wheat500.withOpacity(0.3),
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondaryContainer,
                                       borderRadius: BorderRadius.circular(4),
                                     ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
-                                        const Icon(
+                                        Icon(
                                           Icons.book,
                                           size: 14,
-                                          color: AppTheme.wheat500,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onSecondaryContainer,
                                         ),
                                         const SizedBox(width: 4),
                                         Text(
                                           ref,
-                                          style: const TextStyle(
+                                          style: TextStyle(
                                             fontSize: 12,
-                                            color: AppTheme.wheat500,
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .onSecondaryContainer,
                                           ),
                                         ),
                                       ],
@@ -170,19 +188,25 @@ class _SearchScreenState extends State<SearchScreen> {
                             // Word text
                             Text(
                               result.text,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
-                                color: AppTheme.rosyBrown800,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium
+                                    ?.color,
                               ),
                             ),
                             if (result.pron.isNotEmpty) ...[
                               const SizedBox(height: 4),
                               Text(
                                 result.pron,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
-                                  color: AppTheme.rosyBrown600,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleMedium
+                                      ?.color,
                                 ),
                               ),
                             ],
@@ -193,9 +217,12 @@ class _SearchScreenState extends State<SearchScreen> {
                               const SizedBox(height: 8),
                               Text(
                                 result.brief!,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
-                                  color: AppTheme.wheat600,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge
+                                      ?.color,
                                 ),
                               ),
                             ],
@@ -215,12 +242,13 @@ class _SearchScreenState extends State<SearchScreen> {
                             ? null
                             : () => provider.loadMore(widget.query),
                         child: provider.isLoadingMore
-                            ? const SizedBox(
+                            ? SizedBox(
                                 width: 20,
                                 height: 20,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: Colors.white,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                 ),
                               )
                             : const Text('加载更多'),
@@ -235,9 +263,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       child: Text(
                         '已显示所有 ${provider.results.length} 条相关结果',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: AppTheme.wheat500,
+                          color: Theme.of(context).colorScheme.secondary,
                         ),
                       ),
                     ),
@@ -249,9 +277,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: Text.rich(
                     TextSpan(
                       text: '没有找到想找的词汇？尝试',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppTheme.wheat400,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                       ),
                       children: [
                         WidgetSpan(
@@ -259,11 +287,11 @@ class _SearchScreenState extends State<SearchScreen> {
                             onTap: () {
                               // Open feedback form
                             },
-                            child: const Text(
+                            child: Text(
                               '向我们反馈',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: AppTheme.wheat600,
+                                color: Theme.of(context).colorScheme.primary,
                                 decoration: TextDecoration.underline,
                               ),
                             ),
@@ -275,11 +303,11 @@ class _SearchScreenState extends State<SearchScreen> {
                             onTap: () {
                               // Open submission form
                             },
-                            child: const Text(
+                            child: Text(
                               '向我们提交数据',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: AppTheme.wheat600,
+                                color: Theme.of(context).colorScheme.primary,
                                 decoration: TextDecoration.underline,
                               ),
                             ),

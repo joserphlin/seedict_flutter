@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import '../utils/theme.dart';
+
 import 'package:url_launcher/url_launcher.dart';
 
 class NavPanel extends StatelessWidget {
@@ -18,7 +18,7 @@ class NavPanel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).cardColor,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -79,7 +79,9 @@ class _NavButtonState extends State<_NavButton> {
           margin: const EdgeInsets.all(4),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
           decoration: BoxDecoration(
-            color: _isHovered ? AppTheme.wheat50 : Colors.transparent,
+            color: _isHovered
+                ? Theme.of(context).colorScheme.primary.withOpacity(0.1)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
@@ -87,7 +89,9 @@ class _NavButtonState extends State<_NavButton> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.bold,
-              color: _isHovered ? AppTheme.rosyBrown800 : AppTheme.rosyBrown600,
+              color: _isHovered
+                  ? Theme.of(context).colorScheme.primary
+                  : Theme.of(context).colorScheme.onSurface,
             ),
           ),
         ),

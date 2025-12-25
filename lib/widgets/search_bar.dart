@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../services/search_history_service.dart';
-import '../utils/theme.dart';
+
+import 'package:record/record.dart';
 
 class SearchBar extends StatefulWidget {
   final bool autoFocus;
@@ -16,6 +17,8 @@ class _SearchBarState extends State<SearchBar> {
   final TextEditingController _controller = TextEditingController();
   final SearchHistoryService _historyService = SearchHistoryService();
   final FocusNode _focusNode = FocusNode();
+
+  final Record _audioRecorder = Record();
 
   List<String> _filteredHistory = [];
   bool _showHistory = false;
@@ -36,6 +39,7 @@ class _SearchBarState extends State<SearchBar> {
   void dispose() {
     _controller.dispose();
     _focusNode.dispose();
+    _audioRecorder.dispose();
     super.dispose();
   }
 
@@ -100,22 +104,20 @@ class _SearchBarState extends State<SearchBar> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: Theme.of(context).cardColor,
               borderRadius: BorderRadius.circular(
                   _showHistory && _filteredHistory.isNotEmpty ? 24 : 48),
               border: Border.all(
-                color: AppTheme.rosyBrown300,
-                width: 2,
+                color: Theme.of(context).colorScheme.outlineVariant,
+                width: 1,
               ),
-              boxShadow: _showHistory && _filteredHistory.isNotEmpty
-                  ? [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                    ]
-                  : [],
+              boxShadow: [
+                BoxShadow(
+                  color: Theme.of(context).shadowColor.withOpacity(0.05),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
             ),
             child: Column(
               children: [
@@ -138,7 +140,9 @@ class _SearchBarState extends State<SearchBar> {
                             suffixIcon: _controller.text.isNotEmpty
                                 ? IconButton(
                                     icon: const Icon(Icons.close, size: 20),
-                                    color: AppTheme.rosyBrown300,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurfaceVariant,
                                     onPressed: () {
                                       _controller.clear();
                                       _filterHistory();
@@ -146,9 +150,9 @@ class _SearchBarState extends State<SearchBar> {
                                   )
                                 : null,
                           ),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
-                            color: AppTheme.rosyBrown800,
+                            color: Theme.of(context).textTheme.bodyLarge?.color,
                           ),
                           onChanged: (value) => _filterHistory(),
                           onSubmitted: (value) => _handleSubmit(),
@@ -156,7 +160,7 @@ class _SearchBarState extends State<SearchBar> {
                       ),
                       IconButton(
                         icon: const Icon(Icons.search, size: 28),
-                        color: AppTheme.rosyBrown400,
+                        color: Theme.of(context).colorScheme.primary,
                         onPressed: _handleSubmit,
                       ),
                     ],
@@ -180,11 +184,12 @@ class _SearchBarState extends State<SearchBar> {
                               alignment: Alignment.centerRight,
                               child: TextButton(
                                 onPressed: _clearHistory,
-                                child: const Text(
+                                child: Text(
                                   '清空历史',
                                   style: TextStyle(
                                     fontSize: 12,
-                                    color: AppTheme.rosyBrown300,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
                                   ),
                                 ),
                               ),
@@ -201,11 +206,15 @@ class _SearchBarState extends State<SearchBar> {
                           onExit: (_) => setState(() => _selectedIndex = -1),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: isSelected ? AppTheme.rosyBrown50 : null,
+                              color: isSelected
+                                  ? Theme.of(context)
+                                      .colorScheme
+                                      .primaryContainer
+                                  : null,
                               border: Border(
                                 left: BorderSide(
                                   color: isSelected
-                                      ? AppTheme.rosyBrown700
+                                      ? Theme.of(context).colorScheme.primary
                                       : Colors.transparent,
                                   width: 4,
                                 ),
@@ -213,23 +222,29 @@ class _SearchBarState extends State<SearchBar> {
                             ),
                             child: ListTile(
                               dense: true,
-                              leading: const Icon(
+                              leading: Icon(
                                 Icons.history,
-                                color: AppTheme.rosyBrown400,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
                                 size: 20,
                               ),
                               title: Text(
                                 item,
                                 style: TextStyle(
                                   color: isSelected
-                                      ? AppTheme.rosyBrown700
-                                      : AppTheme.rosyBrown600,
+                                      ? Theme.of(context)
+                                          .colorScheme
+                                          .onPrimaryContainer
+                                      : Theme.of(context).colorScheme.onSurface,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
                               trailing: IconButton(
                                 icon: const Icon(Icons.close, size: 18),
-                                color: AppTheme.rosyBrown300,
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .onSurfaceVariant,
                                 onPressed: () => _deleteHistory(item),
                               ),
                               onTap: () => _selectHistory(item),

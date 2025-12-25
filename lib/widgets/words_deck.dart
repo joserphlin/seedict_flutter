@@ -3,7 +3,6 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../models/word.dart';
 import '../providers/deck_provider.dart';
-import '../utils/theme.dart';
 
 class WordsDeck extends StatefulWidget {
   const WordsDeck({super.key});
@@ -31,11 +30,11 @@ class _WordsDeckState extends State<WordsDeck>
     return Consumer<DeckProvider>(
       builder: (context, provider, child) {
         if (provider.isLoading) {
-          return const SizedBox(
+          return SizedBox(
             height: 300,
             child: Center(
               child: CircularProgressIndicator(
-                color: AppTheme.rosyBrown600,
+                color: Theme.of(context).colorScheme.primary,
               ),
             ),
           );
@@ -47,19 +46,21 @@ class _WordsDeckState extends State<WordsDeck>
             child: Center(
               child: Text(
                 '加载失败: ${provider.error}',
-                style: const TextStyle(color: AppTheme.rosyBrown400),
+                style: TextStyle(color: Theme.of(context).colorScheme.error),
               ),
             ),
           );
         }
 
         if (provider.words.isEmpty) {
-          return const SizedBox(
+          return SizedBox(
             height: 300,
             child: Center(
               child: Text(
                 '暂无词汇',
-                style: TextStyle(color: AppTheme.rosyBrown400),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
           );
@@ -162,13 +163,14 @@ class _WordCardState extends State<_WordCard> {
           width: 300,
           height: 240,
           decoration: BoxDecoration(
-            color: AppTheme.rosyBrown50,
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppTheme.wheat200, width: 1),
+            border: Border.all(
+                color: Theme.of(context).colorScheme.outlineVariant, width: 1),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
+                color: Theme.of(context).shadowColor.withOpacity(0.05),
+                blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
             ],
@@ -178,34 +180,36 @@ class _WordCardState extends State<_WordCard> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   '#汝会仈儥？',
                   style: TextStyle(
                     fontSize: 16,
                     fontStyle: FontStyle.italic,
-                    color: AppTheme.wheat400,
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20),
                 Center(
                   child: Column(
                     children: [
                       Text(
                         widget.word.text,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
-                          color: AppTheme.rosyBrown800,
+                          color:
+                              Theme.of(context).textTheme.headlineMedium?.color,
                         ),
                         textAlign: TextAlign.center,
                       ),
                       if (widget.word.pron.isNotEmpty) ...[
-                        const SizedBox(height: 8),
+                        SizedBox(height: 8),
                         Text(
                           widget.word.pron,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
-                            color: AppTheme.rosyBrown600,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                         ),
                       ],
@@ -216,9 +220,9 @@ class _WordCardState extends State<_WordCard> {
                 Expanded(
                   child: Text(
                     '释义：${widget.word.expl}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: AppTheme.rosyBrown800,
+                      color: Theme.of(context).textTheme.bodyLarge?.color,
                     ),
                     maxLines: 4,
                     overflow: TextOverflow.ellipsis,

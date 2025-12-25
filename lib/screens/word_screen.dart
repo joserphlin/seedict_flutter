@@ -3,11 +3,12 @@ import 'package:go_router/go_router.dart';
 import '../models/word_detail.dart';
 import '../models/audio_info.dart';
 import '../services/api_service.dart';
-import '../utils/theme.dart';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
 import '../providers/favorite_provider.dart';
 import '../models/word.dart';
+import '../widgets/pronunciation_practice.dart';
 
 class WordScreen extends StatefulWidget {
   final String w;
@@ -147,7 +148,9 @@ class _WordScreenState extends State<WordScreen> {
                 return IconButton(
                   icon: Icon(
                     isFavorite ? Icons.star : Icons.star_border,
-                    color: isFavorite ? Colors.amber : AppTheme.rosyBrown400,
+                    color: isFavorite
+                        ? Colors.amber
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
                   onPressed: () {
                     final detail = _wordDetail!.seedict;
@@ -181,9 +184,9 @@ class _WordScreenState extends State<WordScreen> {
 
   Widget _buildBody() {
     if (_isLoading) {
-      return const Center(
+      return Center(
         child: CircularProgressIndicator(
-          color: AppTheme.rosyBrown600,
+          color: Theme.of(context).colorScheme.primary,
         ),
       );
     }
@@ -193,10 +196,10 @@ class _WordScreenState extends State<WordScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
+            Icon(
               Icons.error_outline,
               size: 64,
-              color: AppTheme.rosyBrown400,
+              color: Theme.of(context).colorScheme.error,
             ),
             const SizedBox(height: 16),
             Text(
@@ -206,7 +209,7 @@ class _WordScreenState extends State<WordScreen> {
             const SizedBox(height: 8),
             Text(
               _error!,
-              style: const TextStyle(color: AppTheme.rosyBrown400),
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
             ),
             const SizedBox(height: 16),
             ElevatedButton(
@@ -246,19 +249,25 @@ class _WordScreenState extends State<WordScreen> {
                           children: [
                             Text(
                               detail.text,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 36,
                                 fontWeight: FontWeight.bold,
-                                color: AppTheme.rosyBrown800,
+                                color: Theme.of(context)
+                                    .textTheme
+                                    .headlineMedium
+                                    ?.color,
                               ),
                             ),
                             if (detail.pronPrimary.isNotEmpty) ...[
                               const SizedBox(height: 8),
                               Text(
                                 detail.pronPrimary,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 18,
-                                  color: AppTheme.rosyBrown600,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .titleLarge
+                                      ?.color,
                                 ),
                               ),
                             ],
@@ -268,12 +277,12 @@ class _WordScreenState extends State<WordScreen> {
                       // Audio button (only show when loading or audio available)
                       if (_isLoadingAudio || _currentAudioUrl != null)
                         _isLoadingAudio
-                            ? const SizedBox(
+                            ? SizedBox(
                                 width: 32,
                                 height: 32,
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2,
-                                  color: AppTheme.rosyBrown600,
+                                  color: Theme.of(context).colorScheme.primary,
                                 ),
                               )
                             : IconButton(
@@ -282,7 +291,7 @@ class _WordScreenState extends State<WordScreen> {
                                       ? Icons.pause_circle
                                       : Icons.volume_up,
                                 ),
-                                color: AppTheme.rosyBrown600,
+                                color: Theme.of(context).colorScheme.primary,
                                 iconSize: 32,
                                 onPressed: _playAudio,
                                 tooltip: _isPlaying ? '暂停' : '播放',
@@ -319,7 +328,9 @@ class _WordScreenState extends State<WordScreen> {
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: AppTheme.rosyBrown700,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .primaryContainer,
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: Text(
@@ -333,9 +344,12 @@ class _WordScreenState extends State<WordScreen> {
                               Expanded(
                                 child: Text(
                                   expl.expl!,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
-                                    color: AppTheme.rosyBrown800,
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyLarge
+                                        ?.color,
                                   ),
                                 ),
                               ),
@@ -346,9 +360,9 @@ class _WordScreenState extends State<WordScreen> {
                       const Divider(),
                       Text(
                         '注释：${detail.commentExpl}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
-                          color: AppTheme.rosyBrown600,
+                          color: Theme.of(context).textTheme.bodyMedium?.color,
                         ),
                       ),
                     ],
@@ -357,17 +371,19 @@ class _WordScreenState extends State<WordScreen> {
                       if (detail.synonym != null)
                         Text(
                           '近义词：${detail.synonym}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
-                            color: AppTheme.rosyBrown600,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                         ),
                       if (detail.antonym != null)
                         Text(
                           '反义词：${detail.antonym}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
-                            color: AppTheme.rosyBrown600,
+                            color:
+                                Theme.of(context).textTheme.bodyMedium?.color,
                           ),
                         ),
                     ],
@@ -400,7 +416,8 @@ class _WordScreenState extends State<WordScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Table(
-                  border: TableBorder.all(color: AppTheme.wheat200),
+                  border: TableBorder.all(
+                      color: Theme.of(context).colorScheme.outlineVariant),
                   columnWidths: const {
                     0: FlexColumnWidth(2),
                     1: FlexColumnWidth(1),
@@ -408,8 +425,9 @@ class _WordScreenState extends State<WordScreen> {
                   },
                   children: [
                     TableRow(
-                      decoration:
-                          const BoxDecoration(color: AppTheme.rosyBrown300),
+                      decoration: BoxDecoration(
+                          color:
+                              Theme.of(context).colorScheme.primaryContainer),
                       children: [
                         _buildTableHeader('读音'),
                         _buildTableHeader('连读'),
@@ -432,6 +450,15 @@ class _WordScreenState extends State<WordScreen> {
             const SizedBox(height: 16),
           ],
 
+          // Pronunciation Practice (New Feature)
+          if (false && detail.pronPrimary.isNotEmpty) ...[
+            PronunciationPractice(
+              originalAudioUrl: _currentAudioUrl,
+              wordText: detail.text,
+            ),
+            const SizedBox(height: 16),
+          ],
+
           // Glyphs
           if (detail.glyphs.isNotEmpty) ...[
             _buildSectionTitle('用字一览'),
@@ -439,15 +466,17 @@ class _WordScreenState extends State<WordScreen> {
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Table(
-                  border: TableBorder.all(color: AppTheme.wheat200),
+                  border: TableBorder.all(
+                      color: Theme.of(context).colorScheme.outlineVariant),
                   columnWidths: const {
                     0: FlexColumnWidth(1),
                     1: FlexColumnWidth(1),
                   },
                   children: [
                     TableRow(
-                      decoration:
-                          const BoxDecoration(color: AppTheme.rosyBrown300),
+                      decoration: BoxDecoration(
+                          color:
+                              Theme.of(context).colorScheme.primaryContainer),
                       children: [
                         _buildTableHeader('用字'),
                         _buildTableHeader('类别'),
@@ -475,10 +504,10 @@ class _WordScreenState extends State<WordScreen> {
       padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.bold,
-          color: AppTheme.rosyBrown800,
+          color: Theme.of(context).textTheme.titleLarge?.color,
         ),
       ),
     );
@@ -505,9 +534,9 @@ class _WordScreenState extends State<WordScreen> {
       child: Text(
         text,
         textAlign: TextAlign.center,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 14,
-          color: AppTheme.rosyBrown800,
+          color: Theme.of(context).textTheme.bodyLarge?.color,
         ),
       ),
     );
@@ -544,10 +573,10 @@ class _WordScreenState extends State<WordScreen> {
                 Flexible(
                   child: Text(
                     feng.text,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
-                      color: AppTheme.rosyBrown800,
+                      color: Theme.of(context).textTheme.headlineMedium?.color,
                     ),
                   ),
                 ),
@@ -555,9 +584,9 @@ class _WordScreenState extends State<WordScreen> {
                 Flexible(
                   child: Text(
                     '/${feng.pronLiteral}/ → /${feng.pronSandhi}/',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
-                      color: AppTheme.rosyBrown500,
+                      color: Theme.of(context).colorScheme.tertiary,
                     ),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 2,
@@ -575,9 +604,9 @@ class _WordScreenState extends State<WordScreen> {
               const Divider(),
               Text(
                 '注释：${feng.comment}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: AppTheme.rosyBrown600,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
             ],
@@ -588,9 +617,9 @@ class _WordScreenState extends State<WordScreen> {
               feng.refPage != null
                   ? '冯爱珍. 福州方言词典. 南京: 江苏教育出版社, 1998: ${feng.refPage}.'
                   : '冯爱珍. 福州方言词典. 南京: 江苏教育出版社, 1998.',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 12,
-                color: AppTheme.rosyBrown200,
+                color: Theme.of(context).colorScheme.outlineVariant,
               ),
               textAlign: TextAlign.right,
             ),
@@ -600,9 +629,9 @@ class _WordScreenState extends State<WordScreen> {
               const Divider(),
               Text(
                 '校注：${feng.correction}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
-                  color: AppTheme.rosyBrown600,
+                  color: Theme.of(context).textTheme.bodyMedium?.color,
                 ),
               ),
             ],
@@ -632,23 +661,23 @@ class _WordScreenState extends State<WordScreen> {
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
-                        color: AppTheme.rosyBrown700,
+                        color: Theme.of(context).colorScheme.secondary,
                         borderRadius: BorderRadius.circular(4),
                       ),
                       child: Text(
                         expl.lexical!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
-                          color: Colors.white,
+                          color: Theme.of(context).colorScheme.onSecondary,
                         ),
                       ),
                     ),
                   Expanded(
                     child: Text(
                       expl.expl!,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppTheme.rosyBrown800,
+                        color: Theme.of(context).textTheme.bodyLarge?.color,
                       ),
                     ),
                   ),
@@ -661,9 +690,9 @@ class _WordScreenState extends State<WordScreen> {
                 padding: EdgeInsets.only(left: (level + 1) * 16.0, bottom: 2),
                 child: Text(
                   '• $sentence',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 13,
-                    color: AppTheme.rosyBrown600,
+                    color: Theme.of(context).textTheme.bodyMedium?.color,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
@@ -692,11 +721,11 @@ class _WordScreenState extends State<WordScreen> {
 
             // 参考文献
             const SizedBox(height: 8),
-            const Text(
+            Text(
               '李如龙, 王升魁. 戚林八音校注. 福州: 福建人民出版社, 2001.',
               style: TextStyle(
                 fontSize: 12,
-                color: AppTheme.rosyBrown200,
+                color: Theme.of(context).colorScheme.outlineVariant,
               ),
               textAlign: TextAlign.right,
             ),
@@ -711,9 +740,9 @@ class _WordScreenState extends State<WordScreen> {
                     padding: const EdgeInsets.only(bottom: 4),
                     child: Text(
                       '校注：${cikling.comment}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppTheme.rosyBrown600,
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
                       ),
                     ),
                   ),
@@ -729,7 +758,7 @@ class _WordScreenState extends State<WordScreen> {
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppTheme.wheat50,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -738,10 +767,10 @@ class _WordScreenState extends State<WordScreen> {
           // 词条
           Text(
             cikling.text,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: AppTheme.rosyBrown800,
+              color: Theme.of(context).textTheme.titleLarge?.color,
             ),
           ),
           const SizedBox(height: 8),
@@ -755,18 +784,18 @@ class _WordScreenState extends State<WordScreen> {
                   children: [
                     Text(
                       '戚: ${cikling.cikInitial}${cikling.cikFinal}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppTheme.rosyBrown700,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                     if (cikling.cikAnnotation != null &&
                         cikling.cikAnnotation!.isNotEmpty)
                       Text(
                         cikling.cikAnnotation!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
-                          color: AppTheme.rosyBrown500,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
                   ],
@@ -778,18 +807,18 @@ class _WordScreenState extends State<WordScreen> {
                   children: [
                     Text(
                       '林: ${cikling.lingInitial}${cikling.lingFinal}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
-                        color: AppTheme.rosyBrown700,
+                        color: Theme.of(context).colorScheme.secondary,
                       ),
                     ),
                     if (cikling.lingAnnotation != null &&
                         cikling.lingAnnotation!.isNotEmpty)
                       Text(
                         cikling.lingAnnotation!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
-                          color: AppTheme.rosyBrown500,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
                   ],

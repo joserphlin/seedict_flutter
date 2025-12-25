@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../widgets/nav_panel.dart';
 import '../widgets/search_bar.dart' as custom;
 import '../widgets/words_deck.dart';
-import '../utils/theme.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -47,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               // Header section with nav and logo
               Container(
-                color: AppTheme.wheat50,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
                 child: Column(
@@ -73,12 +72,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             'assets/logo-see.png',
                             height: 120,
                             errorBuilder: (context, error, stackTrace) {
-                              return const Text(
+                              return Text(
                                 '米时典',
                                 style: TextStyle(
                                   fontSize: 48,
                                   fontWeight: FontWeight.bold,
-                                  color: AppTheme.rosyBrown800,
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .displayLarge
+                                      ?.color,
                                 ),
                               );
                             },
@@ -99,7 +101,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // Words deck section
               Container(
-                color: AppTheme.wheat50,
+                color: Theme.of(context).scaffoldBackgroundColor,
                 padding: const EdgeInsets.symmetric(vertical: 40),
                 child: const WordsDeck(),
               ),
