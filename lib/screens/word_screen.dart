@@ -8,7 +8,6 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
 import '../providers/favorite_provider.dart';
 import '../models/word.dart';
-import '../widgets/pronunciation_practice.dart';
 
 class WordScreen extends StatefulWidget {
   final String w;
@@ -446,15 +445,6 @@ class _WordScreenState extends State<WordScreen> {
                   ],
                 ),
               ),
-            ),
-            const SizedBox(height: 16),
-          ],
-
-          // Pronunciation Practice (New Feature)
-          if (false && detail.pronPrimary.isNotEmpty) ...[
-            PronunciationPractice(
-              originalAudioUrl: _currentAudioUrl,
-              wordText: detail.text,
             ),
             const SizedBox(height: 16),
           ],
